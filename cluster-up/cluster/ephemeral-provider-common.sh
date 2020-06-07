@@ -49,6 +49,9 @@ function _add_common_params() {
 }
 
 function _kubectl() {
+    echo "------------_kubectl function of ephemeral provider-------"
+    echo ${KUBEVIRTCI_CONFIG_PATH}
+    echo $KUBEVIRT_PROVIDER
     export KUBECONFIG=${KUBEVIRTCI_CONFIG_PATH}/$KUBEVIRT_PROVIDER/.kubeconfig
     ${KUBEVIRTCI_CONFIG_PATH}/$KUBEVIRT_PROVIDER/.kubectl "$@"
 }

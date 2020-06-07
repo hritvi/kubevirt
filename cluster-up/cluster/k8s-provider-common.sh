@@ -16,7 +16,12 @@ function up() {
     export KUBECONFIG=${KUBEVIRTCI_CONFIG_PATH}/$KUBEVIRT_PROVIDER/.kubeconfig
     ${KUBEVIRTCI_CONFIG_PATH}/$KUBEVIRT_PROVIDER/.kubectl config set-cluster kubernetes --server=https://$(_main_ip):$(_port k8s)
     ${KUBEVIRTCI_CONFIG_PATH}/$KUBEVIRT_PROVIDER/.kubectl config set-cluster kubernetes --insecure-skip-tls-verify=true
-
+    echo "-------------------------------------------------"
+    echo "running k8s provider common"
+    echo ${_cli}
+    echo $provider_prefix
+    echo ${KUBEVIRTCI_CONFIG_PATH
+    echo "-------------------------------------------------"
     # Make sure that local config is correct
     prepare_config
 
