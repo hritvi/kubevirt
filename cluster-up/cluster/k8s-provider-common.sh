@@ -20,7 +20,7 @@ function up() {
     echo "running k8s provider common"
     echo ${_cli}
     echo $provider_prefix
-    echo ${KUBEVIRTCI_CONFIG_PATH
+    echo ${KUBEVIRTCI_CONFIG_PATH}
     echo "-------------------------------------------------"
     # Make sure that local config is correct
     prepare_config
