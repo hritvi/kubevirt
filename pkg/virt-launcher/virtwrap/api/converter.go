@@ -735,6 +735,26 @@ func Convert_v1_VirtualMachine_To_api_Domain(vmi *v1.VirtualMachineInstance, dom
 		if len(vmi.Spec.Domain.Firmware.Serial) > 0 {
 			domain.Spec.SysInfo.System = append(domain.Spec.SysInfo.System, Entry{Name: "serial", Value: string(vmi.Spec.Domain.Firmware.Serial)})
 		}
+
+		if vmi.Spec.Domain.Firmware.KernelBoot != nil {
+			//to extract the disk image from volume
+			newDisk := Disk{}
+			volume := volumes[vmi.Spec.Domain.Firmware.KernelBoot.Name]
+			if volume == nil {
+				return fmt.Errorf("No matching volume with name %s found", vmi.Spec.Domain.Firmware.KernelBoot.Name)
+			}
+			err = Convert_v1_Volume_To_api_Disk(volume, &newDisk, c, volumeIndices[vmi.Spec.Domain.Firmware.KernelBoot.Name])
+			if err != nil {
+				return err
+			}
+			//TODO: how to set the kernel and initrd parameters in the domain XML taking it from disk
+			if vmi.Spec.Domain.Firmware.KernelBoot.Cmdline!=nil{
+				domain.Spec.OS.Cmdline = vmi.Spec.Domain.Firmware.KernelBoot.Cmdline
+			}
+			else {
+				domain.Spec.OS.Cmdline = "add some default cmdline arguments"
+			}
+		}
 	}
 	if c.SMBios != nil {
 		domain.Spec.SysInfo.System = append(domain.Spec.SysInfo.System,
