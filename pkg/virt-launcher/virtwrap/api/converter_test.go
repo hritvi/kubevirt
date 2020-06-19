@@ -2202,6 +2202,58 @@ var _ = Describe("Converter", func() {
 		})
 	})
 
+	Context("Kernel Boot", func() {
+		var vmi *v1.VirtualMachineInstance
+		var c *ConverterContext
+
+		BeforeEach(func() {
+			vmi = &v1.VirtualMachineInstance{}
+
+			v1.SetObjectDefaults_VirtualMachineInstance(vmi)
+
+			c = &ConverterContext{
+				VirtualMachine: vmi,
+				UseEmulation:   true,
+			}
+		})
+
+		Context("when kernel boot is not set", func() {
+			It("should configure normal boot", func() {
+				vmi.Spec.Domain.Firmware = &v1.Firmware{}
+				domainSpec := vmiToDomainXMLToDomainSpec(vmi, c)
+				Expect(domainSpec.OS.Kernel).To(BeNil())
+				Expect(domainSpec.OS.Initrd).To(BeNil())
+				Expect(domainSpec.OS.Cmdline).To(BeNil())
+			})
+		})
+
+		Context("when kernel boot is set and kernel is provided", func() {
+			It("Should configure the kernel and command line arguments", func(){
+				//TODO: add cmdline arguments
+				vmi.Spec.Domain.Firmware = &v1.Firmware{
+					KernelBoot: &v1.KernelBoot{
+						Name: "kernelDisk"
+						Cmdline: "some cmdline arguments"
+					},
+				}
+				domainSpec := vmiToDomainXMLToDomainSpec(vmi, c)
+				//TODO: verify the kernel and initrd paramenters
+				Expect(domainSpec.OS.Cmdline).To(Equal("some cmdline arguments"))
+			})
+			It("Should configure the command line arguments to some default value", func(){
+				//TODO: Add the default value
+				vmi.Spec.Domain.Firmware = &v1.Firmware{
+					KernelBoot: &v1.KernelBoot{
+						Name: "kernelDisk"
+					},
+				}
+				domainSpec := vmiToDomainXMLToDomainSpec(vmi, c)
+				Expect(domainSpec.OS.Cmdline).To(Equal("default value"))
+			})		
+		})
+	})
+
+
 	Context("GPU resource request", func() {
 		vmi := &v1.VirtualMachineInstance{
 			ObjectMeta: k8smeta.ObjectMeta{
