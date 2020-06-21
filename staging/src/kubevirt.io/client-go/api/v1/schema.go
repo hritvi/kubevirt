@@ -232,8 +232,11 @@ type EFI struct {
 //
 // +k8s:openapi-gen=true
 type KernelBoot struct {
-	// Name for the kernel disk
-	Name string `json:"name,omitempty"`
+	// The fully-qualified path to the kernel image in the host OS
+	KernelPath string `json:"name,omitempty"`
+	// the fully-qualified path to the ramdisk image in the host OS
+	//+optional
+	InitrdPath string `json:"name,omitempty"`
 	// Arguments to be passed to the kernel at boot time 
 	// +optional
 	Cmdline string `json:"cmdline,omitempty"`
