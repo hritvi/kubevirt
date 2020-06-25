@@ -227,6 +227,22 @@ type EFI struct {
 	SecureBoot *bool `json:"secureBoot,omitempty"`
 }
 
+// Represents the firmware blob used to assist in the kernel boot process.
+// Used for setting the kernel, initrd and cmdline
+//
+// +k8s:openapi-gen=true
+type KernelBoot struct {
+	// The fully-qualified path to the kernel image in the host OS
+	KernelPath string `json:"name,omitempty"`
+	// the fully-qualified path to the ramdisk image in the host OS
+	//+optional
+	InitrdPath string `json:"name,omitempty"`
+	// Arguments to be passed to the kernel at boot time 
+	// +optional
+	Cmdline string `json:"cmdline,omitempty"`
+}
+
+
 //
 // +k8s:openapi-gen=true
 type ResourceRequirements struct {
@@ -334,6 +350,7 @@ type Firmware struct {
 	Bootloader *Bootloader `json:"bootloader,omitempty"`
 	// The system-serial-number in SMBIOS
 	Serial string `json:"serial,omitempty"`
+	KernelBoot *KernelBoot `json:"kernelBoot,omitempty"`
 }
 
 //

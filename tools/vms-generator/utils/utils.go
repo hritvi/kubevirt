@@ -44,6 +44,7 @@ const (
 	VmiFedora            = "vmi-fedora"
 	VmiSecureBoot        = "vmi-secureboot"
 	VmiAlpineEFI         = "vmi-alpine-efi"
+	VmiKernelBoot		 = "vmi-sample"
 	VmiNoCloud           = "vmi-nocloud"
 	VmiPVC               = "vmi-pvc"
 	VmiBlockPVC          = "vmi-block-pvc"
@@ -402,6 +403,28 @@ func GetVMIAlpineEFI() *v1.VirtualMachineInstance {
 	vmi := getBaseVMI(VmiAlpineEFI)
 
 	addContainerDisk(&vmi.Spec, fmt.Sprintf("%s/%s:%s", DockerPrefix, imageAlpine, DockerTag), busVirtio)
+	fmt.Println("We are in the utils.go in vms-generator tools")
+	fmt.Println(vmi.Spec)
+	fmt.Println(DockerPrefix)
+	fmt.Println(busVirtio)
+	vmi.Spec.Domain.Firmware = &v1.Firmware{
+		Bootloader: &v1.Bootloader{
+			EFI: &v1.EFI{},
+		},
+	}
+
+	vmi.Spec.Domain.Resources.Requests[k8sv1.ResourceMemory] = resource.MustParse("1Gi")
+	return vmi
+}
+
+func GetVMISample() *v1.VirtualMachineInstance {
+	vmi := getBaseVMI(VmiAlpineEFI)
+
+	addContainerDisk(&vmi.Spec, fmt.Sprintf("%s/%s:%s", DockerPrefix, imageAlpine, DockerTag), busVirtio)
+	fmt.Println("We are in the utils.go in vms-generator tools")
+	fmt.Println(vmi.Spec)
+	fmt.Println(DockerPrefix)
+	fmt.Println(busVirtio)
 	vmi.Spec.Domain.Firmware = &v1.Firmware{
 		Bootloader: &v1.Bootloader{
 			EFI: &v1.EFI{},
@@ -999,3 +1022,4 @@ func GetVMIGPU() *v1.VirtualMachineInstance {
 	addNoCloudDiskWitUserData(&vmi.Spec, "#cloud-config\npassword: fedora\nchpasswd: { expire: False }")
 	return vmi
 }
+

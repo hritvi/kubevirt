@@ -40,6 +40,7 @@ import (
 )
 
 func main() {
+	fmt.Println("Reached here and this is vms-generator.go in the tools")
 	flag.StringVar(&utils.DockerPrefix, "container-prefix", utils.DockerPrefix, "")
 	flag.StringVar(&utils.DockerTag, "container-tag", utils.DockerTag, "")
 	genDir := flag.String("generated-vms-dir", "", "")
@@ -85,6 +86,7 @@ func main() {
 		utils.VmiMasquerade:        utils.GetVMIMasquerade(),
 		utils.VmiHostDisk:          utils.GetVMIHostDisk(),
 		utils.VmiGPU:               utils.GetVMIGPU(),
+		utils.VmiKernelBoot         utils.GetVMISample(),	
 	}
 
 	var vmireplicasets = map[string]*v1.VirtualMachineInstanceReplicaSet{
