@@ -327,6 +327,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"kubevirt.io/client-go/api/v1.InterfaceSRIOV":                                      schema_kubevirtio_client_go_api_v1_InterfaceSRIOV(ref),
 		"kubevirt.io/client-go/api/v1.InterfaceSlirp":                                      schema_kubevirtio_client_go_api_v1_InterfaceSlirp(ref),
 		"kubevirt.io/client-go/api/v1.KVMTimer":                                            schema_kubevirtio_client_go_api_v1_KVMTimer(ref),
+		"kubevirt.io/client-go/api/v1.KernelBoot":                                          schema_kubevirtio_client_go_api_v1_KernelBoot(ref),
 		"kubevirt.io/client-go/api/v1.KubeVirt":                                            schema_kubevirtio_client_go_api_v1_KubeVirt(ref),
 		"kubevirt.io/client-go/api/v1.KubeVirtCertificateRotateStrategy":                   schema_kubevirtio_client_go_api_v1_KubeVirtCertificateRotateStrategy(ref),
 		"kubevirt.io/client-go/api/v1.KubeVirtCondition":                                   schema_kubevirtio_client_go_api_v1_KubeVirtCondition(ref),
@@ -14626,11 +14627,17 @@ func schema_kubevirtio_client_go_api_v1_Firmware(ref common.ReferenceCallback) c
 							Format:      "",
 						},
 					},
+					"kernelBoot": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Settings to set the kernel for booting.",
+							Ref:         ref("kubevirt.io/client-go/api/v1.KernelBoot"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"kubevirt.io/client-go/api/v1.Bootloader"},
+			"kubevirt.io/client-go/api/v1.Bootloader", "kubevirt.io/client-go/api/v1.KernelBoot"},
 	}
 }
 
@@ -15029,6 +15036,40 @@ func schema_kubevirtio_client_go_api_v1_KVMTimer(ref common.ReferenceCallback) c
 						SchemaProps: spec.SchemaProps{
 							Description: "Enabled set to false makes sure that the machine type or a preset can't add the timer. Defaults to true.",
 							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_kubevirtio_client_go_api_v1_KernelBoot(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Represents the firmware blob used to assist in the kernel boot process. Used for setting the kernel, initrd and cmdline",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kernelPath": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The fully-qualified path to the kernel image in the host OS",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"initrdPath": {
+						SchemaProps: spec.SchemaProps{
+							Description: "the fully-qualified path to the ramdisk image in the host OS",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"cmdline": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Arguments to be passed to the kernel at boot time",
+							Type:        []string{"string"},
 							Format:      "",
 						},
 					},
