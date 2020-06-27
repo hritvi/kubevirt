@@ -55,6 +55,7 @@ const (
 	VmiMultusPtp         = "vmi-multus-ptp"
 	VmiMultusMultipleNet = "vmi-multus-multiple-net"
 	VmiHostDisk          = "vmi-host-disk"
+	VmiKernelBoot        = "vmi-kernel-boot"
 	VmiGPU               = "vmi-gpu"
 	VmTemplateFedora     = "vm-template-fedora"
 	VmTemplateRHEL7      = "vm-template-rhel7"
@@ -570,6 +571,18 @@ func GetVMIWindows() *v1.VirtualMachineInstance {
 	vmi.Spec.Domain.Devices.Interfaces[0].Model = "e1000"
 
 	addPVCDisk(&vmi.Spec, "disk-windows", busSata, "pvcdisk")
+	return vmi
+}
+
+func GetVMIKernelBoot() *v1.VirtualMachineInstance {
+	vmi := getBaseVMI(VmiKernelBoot)
+
+	addContainerDisk(&vmi.Spec, fmt.Sprintf("%s/%s:%s", DockerPrefix, imageAlpine, DockerTag), busVirtio)
+	vmi.Spec.Domain.Firmware = &v1.Firmware{
+		KernelBoot: &v1.KernelBoot{},
+	}
+
+	vmi.Spec.Domain.Resources.Requests[k8sv1.ResourceMemory] = resource.MustParse("1Gi")
 	return vmi
 }
 
