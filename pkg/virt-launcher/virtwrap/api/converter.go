@@ -762,7 +762,7 @@ func Convert_v1_VirtualMachine_To_api_Domain(vmi *v1.VirtualMachineInstance, dom
 				log.Log.Infof(ephemeraldisk.GetFilePath(vmi.Spec.Domain.Firmware.KernelBoot.Name))
 				log.Log.Infof(hostdisk.GetMountedHostDiskDir(vmi.Spec.Domain.Firmware.KernelBoot.Name))
 				log.Log.Infof(containerdisk.GetMountPath(vmi, volumeIndices[vmi.Spec.Domain.Firmware.KernelBoot.Name]))
-				domain.Spec.OS.Kernel = filepath.Join(hostdisk.GetMountedHostDiskDir(vmi.Spec.Domain.Firmware.KernelBoot.Name), vmi.Spec.Domain.Firmware.KernelBoot.KernelPath)
+				domain.Spec.OS.Kernel = filepath.Join(hostdisk.GetMountedHostDiskDir(containerdisk.GetMountPath(vmi, volumeIndices[vmi.Spec.Domain.Firmware.KernelBoot.Name]), vmi.Spec.Domain.Firmware.KernelBoot.KernelPath)
 
 			} else {
 				//TODO: see for ways on how to add default path for a vmlinuz image
